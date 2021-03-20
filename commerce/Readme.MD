@@ -1,1 +1,1 @@
-Последняя рабочая версия! если что.
+A simple magazine with Auction system.

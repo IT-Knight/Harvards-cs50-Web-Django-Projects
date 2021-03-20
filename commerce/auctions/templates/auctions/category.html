@@ -1,0 +1,34 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    <h2> Active Listings in category "{{ category_name | title }}":</h2>
+{#    {% for object in category %}#}
+        {% for listing in active_listings %}
+            <br/>
+            <a href="{% url 'listing' list_id=listing.id %}" id="listing" class="card mb-3" style="display:block; width: 95%; height:300px; color: unset; text-decoration: none">
+                <div class="row no-gutters">
+                    <div class="col-md-4" align="center" style="max-width: 400px; height: 300px">
+                        {% if listing.image %}
+                        <img  src="{{ listing.image }}" style="height: 298px; width: unset" class="card-img" alt="image">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title" >{{ listing.title }}</h5>
+                            <h6 class="card-text"><b>Price:</b> ${{ listing.price }}</h6>
+                            <p class="card-text">{{ listing.desc|truncatechars:500}}</p>
+                            <p class="card-text">
+                                <small class="text-muted"> Created {{ listing.created_date | date:"d M Y, H:i" }}</small><br/>
+                                <small class="text-muted"> Expires {{ listing.expires | date:"d M Y, H:i" }}</small>
+                            </p>
+                            {% if listing.category %}
+                            <h6 class="card-text"><b>Category:</b> {{ listing.category | title }}</h6>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+{#    {% endfor %}#}
+{% endblock %}

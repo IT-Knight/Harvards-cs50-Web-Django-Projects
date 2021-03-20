@@ -1,0 +1,89 @@
+#logo {
+    cursor: default;
+}
+#main {
+    padding: 5px;
+}
+#main-register {
+    padding: 10px;
+    /*display: ;*/
+}
+#post-form, #post_view > div, #profile_post_view > div {
+    max-width: none;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    box-shadow: 0 0 1px 1px #ced4da;
+    padding: 10px;
+    margin: 5px;
+    width: 99%;
+    word-break: break-word;
+    /*border: 1px solid white;*/
+    border-radius: 3px;
+    /*align-content: flex-end;*/
+}
+#post_textarea {
+    margin-bottom: 3px;
+}
+#profile_post_view {
+    margin-top: 150px;
+}
+.follow {
+    font-size: 20px;
+    margin-left: 20px;
+}
+#display_page {
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    /*color: #007bff;*/
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+#display_page:hover {
+    background-color: white;
+}
+
+/*Like button*/
+button.like {
+    width: 35px;
+    /*height: 30px;*/
+    background-image: url("images/like1.png");
+    background-size: cover;
+    background-position: center;
+    border: none;
+    outline: none;
+    /*box-shadow: none;*/
+}
+.tolike:hover {
+    background-image: url("images/like3.png");
+}
+.tolike:focus {
+    /*border: none;*/
+    outline: none;
+}
+.dislike, .dislike:hover {
+    background-image: url("images/like3.png");
+}
+
+/* Edit button */
+button[value=edit] {
+    width: 35px;
+    background-image: url("images/Edit_icon_(the_Noun_Project_30184).svg.png");
+    background-size: cover;
+    background-position: center;
+    border: none;
+    outline: none;
+}
+
+button[value=edit]:hover {
+    border: none;
+}
+button[value=edit]:focus {
+    outline: none;
+    border: none;
+}

@@ -1,0 +1,24 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block body %}
+    {% if Edit_success %}
+    <h4>Page successfully edited!</h4>
+    {% endif %}
+
+<div>
+    {{ entry | safe }}
+</div>
+
+    <form action="{% url 'edit_page' %}" method="get">
+
+        <input name="title" value="{{title}}" hidden>
+
+        <input type="submit" value="Edit this page">
+
+    </form>
+{% endblock %}
+

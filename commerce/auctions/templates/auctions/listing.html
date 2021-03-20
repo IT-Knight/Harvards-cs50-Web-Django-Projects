@@ -1,0 +1,120 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    {% if listing.closed %}
+        <div align="center"><h2>Listing is Closed!</h2></div>
+    {% elif listing.expired %}
+        <div align="center"><h2>This listing is expired!</h2>
+        Expire date: {{ listing.expires | date:"d M Y, H:i" }}
+        </div>
+    {% endif %}
+    <h3>{{ listing.title }}</h3>
+    <p style="display: block; width: 60%">{{ listing.desc }}</p>
+    <b>Category:</b> {{ listing.category | title }}<br/>
+    <b>Create date:</b> {{ listing.created_date | date:"d M Y, H:i" }}<br/>
+    <b>Expires:</b> {{ listing.expires | date:"d M Y, H:i" }}<br/>
+    <b>Author:</b> {{ listing.author }}<br/><br/>
+    <h6><b>Starting bid:</b> {{ listing.price }}$</h6>
+
+    {% if not listing.closed %}
+        {% if user.is_authenticated %}
+                {% if max_bid %}
+                    <b>Max bid</b> is: <b><u>{{ max_bid.bid_amount }}$</u></b> by Participant <i><strong>{{ max_bid.participant }}</strong></i><br/>
+                {% endif %}
+                {% if user.username != listing.author.username %}
+                    <form name="Make bid" action="{% url 'listing' list_id=listing.id %}" method="post">
+                        {% csrf_token %}
+                        <br/><p><label><i><b>Make your bid($)</b>:</i></label><br/>
+                        <i>(should be at least as large as the starting bid{% if max_bid %} and larger then Max bid){% else %}){% endif %}</i></p>
+                        <input type="text" placeholder="example: 1234.56" name="new_bid" {% if users_request_bid %}value="{{users_request_bid}}"{% endif %} class="form-control"><br/>
+
+                        {% if error_message %}
+                            <u>Error:</u> {{ error_message }}<br/>
+                        {% endif %}
+
+                        <input type="submit" value="Make Bid" class="btn btn-warning"><br/><br/>
+                    </form>
+                {% else %}
+                    <form action="{% url 'listing' list_id=listing.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="text" name="close" value="close" hidden>
+                        <input type="submit" value="Close Auction" class="btn btn-warning">
+                    </form><br/>
+                {% endif %}
+            {% endif %}
+    {% elif listing.closed %}
+        Auction is Closed by author or Expired!<br/>
+        {% if listing.winner %}
+            The Winner is: <b>{{ listing.winner.username }}</b> with Bid: <b>{{ max_bid.bid_amount }}$</b><br/><br/>
+            {% else %}
+            No Any Winner<br/><br/>
+        {% endif %}
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <form action="{% url 'listing' list_id=listing.id %}" method="post">
+            {% csrf_token %}
+        {% if in_watchlist %}
+            <input type="text" name="watchlist" value="delete" hidden>
+            <input type="submit" value="Delete from watchlist" class="btn btn-success">
+        {% else %}
+            <input type="text" name="watchlist" value="add" hidden>
+            <input type="submit" value="Add to watchlist" class="btn btn-success">
+        {% endif%}
+        </form>
+            <br/>
+    {% endif %}
+
+
+
+    {% if user.is_authenticated %}
+        {% if listing.image %}
+            <div style="float: left; margin-right:7px">
+            <img height="350" src="{{ listing.image }}" alt="image"/><br/>
+        </div>
+        {% endif %}
+
+        <form name="comments" action="{% url 'listing' list_id=listing.id %}" method="post">
+            {% csrf_token %}
+            <label>&nbsp&nbsp&nbspUsername: <b>{{ user }}</b></label>
+            <textarea style="width:70%" name="comment" placeholder="Your comment" rows=5 class="form-control"></textarea><br/>
+            <input type="submit" value="Leave Comment" class="btn btn-primary mb-2">
+        </form><br/><br/><br/><br/></br>
+        {% if comments.all %}
+                <h4>Comments:</h4>
+                <ul>
+                    {% for comment in comments.all|dictsortreversed:"comment_date" %}
+                        <li style="padding: 6px" class="media card mb-3">
+                              <div class="media-body">
+                                  Username: <b>{{ comment.user.username }}</b>  Date: <b>{{ comment.comment_date | date:"d M Y, H:i" }}</b><br/>
+                                  <b>Comment:</b><br/>{{ comment.comment }}
+                              </div>
+                        </li>
+                   {% endfor %}
+                </ul>
+            {% endif %}
+    {% else %}
+        {% if listing.image %}
+            <div style="">
+            <img height="350" src="{{ listing.image }}" alt="image"/><br/>
+        </div>
+        {% endif %}
+            {% if comments.all %}
+                <h4>Comments:</h4>
+                <ul>
+                    {% for comment in comments.all|dictsortreversed:"comment_date" %}
+                        <li style="padding: 6px" class="media card mb-3">
+                              <div class="media-body">
+                                  Username: <b>{{ comment.user.username }}</b>  Date: <b>{{ comment.comment_date | date:"d M Y, H:i" }}</b><br/>
+                                  <b>Comment:</b><br/>{{ comment.comment }}
+                              </div>
+                        </li>
+                   {% endfor %}
+                </ul>
+            {% endif %}
+    <p><br/> </p>
+    <p><br/> </p>
+
+    {% endif %}
+
+{% endblock %}

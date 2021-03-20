@@ -1,0 +1,30 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Edit Page - {{ title }}
+{% endblock %}
+
+{% block body %}
+
+    <h4><u>Edit Page</u></h4>
+    <h5>Title: "{{title}}"<br/></h5>
+    <form action="{% url 'edit_page' %}" method="post">
+        {% csrf_token %}
+        <input name="title" value="{{title}}" hidden>
+
+        <b>Content:</b><br/>
+        <textarea style="height: 40vh; width: 80%" name="page_content">{{page_content}}
+        </textarea><br/>
+
+        {% if Edit_success %}
+        <h4>Page successfully editted</h4>
+        {%  endif %}
+
+        <br/><input style="width: 155px; text-align: center" type="submit" value="Save editted page">
+
+    </form>
+    <br/>
+    <a href="/wiki/{{title}}">Go back</a>
+
+
+{% endblock %}3

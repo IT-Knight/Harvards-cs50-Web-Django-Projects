@@ -1,0 +1,76 @@
+{% extends 'network/layout.html' %}
+
+{% block  body %}
+    <div id="main">
+
+        <h2>Profile: <strong>{{ profile_user }}</strong><span class="follow">Followers: {{ follows.0 }} &nbsp Following: {{ follows.1 }}</span>
+            </h2>
+
+        {# FOLLOW BUTTONS #}
+        {% if user.is_authenticated and profile_user != user.username %}
+            <form id="profile_post-form" action="{% url 'profile' username=profile_user %}" method="post">
+                {% csrf_token %}
+
+                {% if profile_user_followed %} <input name="to_do" value="unfollow" hidden><button form="profile_post-form" type="submit" class="btn btn-primary" name="unfollow" >Unfollow</button>
+                {% else %} <input name="to_do" value="follow" hidden><button form="profile_post-form" type="submit" class="btn btn-primary" name="follow" >Follow</button>
+                {%  endif %}
+            </form>
+        {% endif %}
+
+        <div id="profile_post_view">
+
+        {% for post in user_posts %}
+
+            {# The Post #}
+            <div id="post_{{post.id}}" class="container">
+                <h5>{{ post.user }}</h5>
+                <span>{{ post.text }}</span><br/>
+                <small class="text-muted">{{ post.posted|date:"M d Y, H:i" }}<br/></small>
+                {% if post.user.id == user.id %}
+                    <button data-post_id="{{post.id}}" class="" value="edit">&nbsp</button>
+                {% endif %}
+
+                {# Like button #}
+                {% if post.user.id == user.id or not user.is_authenticated %}
+                    <button data-post_id="{{post.id}}" class="like tolike" disabled>&nbsp</button><span class="text-muted likes_number">{{ post_like.all|length}}</span><br/>
+                {% else %}
+                    {% if post.is_liked_by_user %}
+                        <button data-post_id="{{post.id}}" class="like dislike">&nbsp</button><span class="text-muted likes_number">{{ post.liked_by.count}}</span><br/>
+                    {% else %}
+                        <button data-post_id="{{post.id}}" class="like tolike">&nbsp</button><span class="text-muted likes_number">{{ post.liked_by.count}}</span><br/>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+
+        {# Paginator #}
+        {% if user_posts.paginator.num_pages > 1 %}
+            <ul class="pagination justify-content-center">
+            {% if user_posts.has_previous %}
+                {% if not user_posts.number|add:"-1" == 1 %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                {% endif %}
+                <li class="page-item"><a class="page-link" href="?page={{ user_posts.previous_page_number }}">previous</a></li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" >previous</a></li>
+            {% endif %}
+
+            <li class="page-item current">
+                <a id="display_page" >Page {{ user_posts.number }} of {{ user_posts.paginator.num_pages }}</a>
+            </li>
+
+            {% if user_posts.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ user_posts.next_page_number }}">next</a></li>
+                {% if not user_posts.number|add:1 == user_posts.paginator.num_pages %}
+                    <li class="page-item"><a class="page-link" href="?page={{ user_posts.paginator.num_pages }}">last &raquo;</a></li>
+                {% endif %}
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" >next</a></li>
+            {% endif %}
+            </ul>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

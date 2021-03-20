@@ -1,0 +1,24 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+     Wiki - Search Results: "{{query}}"
+{% endblock %}
+
+
+{% block body %}
+
+    {% if substring_entries %}
+    <h1>Pages Found:</h1><br/>
+        <ul>
+            {% for entry in substring_entries %}
+            <li><a href="{% url 'entry' title=entry %}">{{ entry }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+    <h3>No results found for - <b>{{ query }}</b></h3>
+    {% endif %}
+
+{% endblock %}
+
+
+

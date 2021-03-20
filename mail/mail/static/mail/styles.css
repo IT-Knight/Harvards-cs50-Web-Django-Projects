@@ -1,0 +1,24 @@
+textarea {
+    min-height: 400px;
+}
+div.mail_block {
+    display: block;
+    border: 1px solid black;
+    padding: 15px 5px 0 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    color: unset;
+    text-decoration: none;
+}
+div.mail_block:hover {
+    box-shadow: 0 0 5px blue;
+}
+div[data-read=true] {
+    background-color: grey;
+}
+div[data-read=false] {
+    background-color: white;
+}
+input[value=Archive] {
+
+}

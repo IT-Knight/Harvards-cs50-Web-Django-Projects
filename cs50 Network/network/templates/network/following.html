@@ -1,0 +1,57 @@
+{% extends 'network/layout.html' %}
+
+{% block body %}
+    <div id="main">
+        <h2>Following</h2>
+        {# Post list block #}
+
+        <div id="post_view">
+        {% for post in following_users_posts %}
+            <div id="post_{{post.id}}" class="container">
+                <h5><a href="{% url 'profile' username=post.user %}" class="profile_link">{{ post.user }}</a></h5>
+                <span>{{ post.text }}</span><br/>
+                <small class="text-muted">{{ post.posted|date:"M d Y, H:i" }}<br/></small>
+
+                {% if post.user.id == user.id or not user.is_authenticated %}
+                    <button data-post_id="{{post.id}}" class="like tolike" disabled>&nbsp</button><span class="text-muted likes_number">{{ post_like.all|length}}</span><br/>
+                {% else %}
+                    {% if post.is_liked_by_user %}
+                        <button data-post_id="{{post.id}}" class="like dislike">&nbsp</button><span class="text-muted likes_number">{{ post.liked_by.count}}</span><br/>
+                    {% else %}
+                        <button data-post_id="{{post.id}}" class="like tolike">&nbsp</button><span class="text-muted likes_number">{{ post.liked_by.count}}</span><br/>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% empty %}
+            <br/><h4>No any posts yet!</h4>
+        {% endfor %}
+        </div>
+
+        {# Paginator #}
+        {% if following_users_posts.paginator.num_pages > 1 %}
+        <ul class="pagination justify-content-center">
+            {% if following_users_posts.has_previous %}
+                {% if not following_users_posts.number|add:"-1" == 1 %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                {% endif %}
+                <li class="page-item"><a class="page-link" href="?page={{ following_users_posts.previous_page_number }}">previous</a></li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" >previous</a></li>
+            {% endif %}
+
+            <li class="page-item current">
+                <a id="display_page" >Page {{ following_users_posts.number }} of {{ following_users_posts.paginator.num_pages }}</a>
+            </li>
+
+            {% if following_users_posts.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ following_users_posts.next_page_number }}">next</a></li>
+                {% if not following_users_posts.number|add:1 == following_users_posts.paginator.num_pages %}
+                    <li class="page-item"><a class="page-link" href="?page={{ following_users_posts.paginator.num_pages }}">last &raquo;</a></li>
+                {% endif %}
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" >next</a></li>
+            {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

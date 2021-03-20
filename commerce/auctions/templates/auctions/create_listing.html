@@ -1,0 +1,21 @@
+{% extends 'auctions/layout.html' %}
+{% block body %}
+
+        <form action="{% url 'add_listing' %}" method="post">
+        {% csrf_token %}
+            <input type="text" name="name" placeholder="*Title" class="form-control"><br/>
+            <textarea name="description" rows="10" id="exampleFormControlTextarea1" placeholder="*Description" class="form-control"></textarea><br/>
+            <input type="text" name="price" placeholder="*Start Price($), example: 133.55, 12, 14.00" class="form-control"><br/>
+            <label>*Expire date:<input type="datetime-local" name="expire_date" class="form-control"></label><br/><br/>
+            <input type="url" name="image_url" placeholder="Image URL (optional)" class="form-control"><br>
+            <label>Choose category: (optional)</label><br/>
+            <select name="category" class="custom-select">
+            {% for category in categories %}
+                <option value="{{category}}">{{ category | title }}</option>
+            {% endfor %}
+            </select><br/>
+            Or create your category:<br/>
+            <input type="text" name="new_category" placeholder="Your category (optional)" class="form-control"><br/>
+            <input type="submit" value="&nbsp&nbsp Create&nbsp&nbsp&nbsp&nbsp" class="btn btn-success">
+    </form>
+{% endblock %}

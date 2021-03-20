@@ -1,0 +1,27 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Create New Page
+{% endblock %}
+
+{% block body %}
+
+    <h2>Create New Page</h2>
+    <form action="{% url 'create_page' %}" method="post">
+        {% csrf_token %}
+        <br/>{{page_create_form.title}}
+        {% if Page_exists %}
+        <u>Error</u>: page "<b>{{title}}</b>" exists. Enter another title!
+        {% endif %}
+        <br/><br/>
+        {{page_create_form.page_content}}
+        <br/>
+        {% if Create_success %}
+        <h4>Page successfully created</h4>
+        {%  endif %}
+        <br/><input style="width: 100px; text-align: center" type="submit" value="Save">
+
+    </form>
+
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Error - title '{{ title }}' exists
+{% endblock %}
+
+{% block body %}
+    <h5><u>Error</u>: title "<b>{{ title }}</b>" exists. <br/><br/> Enter another title! </h5>
+    <div>Copy your data for re-use or it will be lost!<br/><br/>
+        <b>Title:</b> <p>{{ title }}</p>
+        <b>Content:</b><p>{{ page_content }}</p>
+    </div>
+    <a href="{% url 'create_page'%}">Go back to Create New Page</a>
+
+
+
+{% endblock %}

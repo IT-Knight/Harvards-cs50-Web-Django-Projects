@@ -1,1 +1,1 @@
-A simple magazine with Auction system.
+A simple magazine with Auction system, E-bay like
